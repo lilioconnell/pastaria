@@ -139,11 +139,91 @@ def order_cost(c):
     final_output = "The grand total cost of your order is ${}".format(grand_total)
     print(final_output)
 
+def get_phone(m):
+    """ Ask for and confirm the user has input an acceptable phone number. """
+    run = True
+    while run == True:
+        phone = get_string(m)
+        phone_number = len(str(phone))
+        if phone_number > 12:
+            print("The number you have entered is too large, please try again")
+        elif phone_number < 9:
+            print("The number you have entered is too small, please try again")
+        else:
+            return phone
+
+def get_name(m):
+    """ Ask for and confirm the user has input an acceptable name. """
+    run = True
+    while run == True:
+        name = get_string(m)
+        name_length = len(str(name))
+        if name_length < 1:
+            print("The number you have entered is too small, please try again")
+        elif name_length > 100 :
+            print("The number you have entered is too large, please try again")
+        else:
+            return name
+
+def get_address(m):
+    """ Ask for and confirm the user has input an acceptable address. """
+    run = True
+    while run == True:
+        address = get_string(m)
+        address_length = len(str(address))
+        if address_length < 15:
+            print("The number you have entered is too small, please try again")
+        else:
+            return address
+
+def confirm_order(c, m):
+    """Confirm the user's order."""
+    grand_total = 0
+    for i in range(0, len(c)):
+        pasta_quantity = c[i][2]
+        pasta_price = c[i][1]
+        total = pasta_price * pasta_quantity
+        grand_total += total
+        output = "{} {} at ${} each: ${}".format(c[i][2], c[i][0], c[i][1], total)
+        print(output)
+    final_output = "The grand total cost of your order is ${}".format(grand_total)
+    print(final_output)
+
+    run = True
+    while run == True:
+        receive = get_string("Would you like to have your order delivered (D) or pick up (P):").upper()
+        if receive == "D":
+            print("This will add an automatic $3 surcharge, your total cost is now ${}".format(grand_total+3))
+            name = get_name("Please enter your name:")
+            address = get_address("Please enter your address in form STREET ADDRESS, PROVINCE, CITY, POST CODE:")
+            phone = get_phone("Please enter your phone number:")
+            confirm = ("Your details are {}: {}: {}".format(name, address, phone))
+            print(confirm)
+            temp = [name, phone, address]
+            m.append(temp)
+            return None
+
+        elif receive == "P":
+            name = get_name("Please enter your name:")
+            phone = get_phone("Please enter your phone number:")
+            confirm = ("Your details are {}: {}".format(name, phone))
+            print(confirm)
+            temp = [name, phone]
+            m.append(temp)
+            return None
+        else:
+            print("This is not a valid input, please try again")
+
+
+
+
 
 def main_menu():
     """Main function call other functions."""
 
     customer_order = []
+
+    customer_details = []
 
     pasta_menu = [
         ["Linguine Gamberi", 23],
@@ -163,6 +243,7 @@ def main_menu():
         ["C", "Review your order"],
         ["D", "Remove a pasta from your order"],
         ["E", "Calculate the total cost of your order"],
+        ["F", "Confirm Order"],
         ["Q", "Quit"]
     ]
 
@@ -195,6 +276,9 @@ def main_menu():
             print("." * 100)
         elif choice == "E":
             order_cost(customer_order)
+            print("." * 100)
+        elif choice == "F":
+            confirm_order(customer_order, customer_details)
             print("." * 100)
         elif choice == "Q":
             print("Thank you for visiting La migliore Pastaria")
