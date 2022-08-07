@@ -176,7 +176,39 @@ def get_address(m):
         else:
             return address
 
-def confirm_order(c, m):
+def confirm_details_delivery():
+    """ Confirm the user's details. """
+    run = True
+    while run == True:
+        name = get_name("Please enter your name:")
+        address = get_address("Please enter your address in form STREET ADDRESS, CITY, POST CODE:")
+        phone = get_phone("Please enter your phone number:")
+        confirm = get_string("Your details are {}: {}: {}, please press Y/N to confirm".format(name, address, phone)).upper()
+        if confirm == "Y":
+            print("Thank you for shopping at Le miligore Pastaria")
+            return confirm
+        elif confirm == "N":
+            print("Details erased, please re-enter")
+        else:
+            print("Invalid input, please try again")
+
+def confirm_details_pickup():
+    """ Confirm the user's details. """
+    run = True
+    while run == True:
+        name = get_name("Please enter your name:")
+        phone = get_phone("Please enter your phone number:")
+        confirm = get_string("Your details are {}: {}, please press Y/N to confirm".format(name, phone)).upper()
+        if confirm == "Y":
+            print("Thank you for shopping at Le miligore Pastaria")
+            return confirm
+        elif confirm == "N":
+            print("Details erased, please re-enter")
+        else:
+            print("Invalid input, please try again")
+
+
+def confirm_order(c):
     """Confirm the user's order."""
     grand_total = 0
     for i in range(0, len(c)):
@@ -189,32 +221,20 @@ def confirm_order(c, m):
     final_output = "The grand total cost of your order is ${}".format(grand_total)
     print(final_output)
 
+
     run = True
     while run == True:
         receive = get_string("Would you like to have your order delivered (D) or pick up (P):").upper()
         if receive == "D":
             print("This will add an automatic $3 surcharge, your total cost is now ${}".format(grand_total+3))
-            name = get_name("Please enter your name:")
-            address = get_address("Please enter your address in form STREET ADDRESS, PROVINCE, CITY, POST CODE:")
-            phone = get_phone("Please enter your phone number:")
-            confirm = ("Your details are {}: {}: {}".format(name, address, phone))
-            print(confirm)
-            temp = [name, phone, address]
-            m.append(temp)
+            confirm_details_delivery()
             return None
 
         elif receive == "P":
-            name = get_name("Please enter your name:")
-            phone = get_phone("Please enter your phone number:")
-            confirm = ("Your details are {}: {}".format(name, phone))
-            print(confirm)
-            temp = [name, phone]
-            m.append(temp)
+            confirm_details_pickup()
             return None
         else:
             print("This is not a valid input, please try again")
-
-
 
 
 
@@ -278,7 +298,7 @@ def main_menu():
             order_cost(customer_order)
             print("." * 100)
         elif choice == "F":
-            confirm_order(customer_order, customer_details)
+            confirm_order(customer_order)
             print("." * 100)
         elif choice == "Q":
             print("Thank you for visiting La migliore Pastaria")
