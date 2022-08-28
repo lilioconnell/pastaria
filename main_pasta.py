@@ -25,6 +25,23 @@ def get_integer(m):
             print("Oops, invalid entry, please try again")
 
 
+def get_yes_no(m):
+    """Get Y or N from user.
+
+    :param m: string
+    :return: integer
+    """
+    run = True
+    while run is True:
+        my_string = input(m).upper()
+        if my_string == "Y":
+            return my_string
+        elif my_string == "N":
+            return my_string
+        else:
+            print("Oops, invalid entry, please try again")
+
+
 def validate_integer(message, a, b):
     """Request limited integer from user.
 
@@ -141,8 +158,7 @@ def print_list_indexes(m):
 
 
 def find_name_index(c, n):
-    """
-    Find name of item from on index number.
+    """Find name of item from on index number.
     :param c: list
     :param n: string
     :return: integer
@@ -213,10 +229,16 @@ def remove_pasta(c):
                               "(please use numbers):", 0, c[pasta_index][2])
     c[pasta_index][2] -= number
     if c[pasta_index][2] == 0:
-        c.pop(pasta_index)
         print()
-        output = "Your basket is now empty"
+        output = ("You have removed all {} from your basket".format(c[pasta_index][0]))
         print(output)
+        print()
+        c.pop(pasta_index)
+        if len(c) == 0:
+            print("Your basket is now empty")
+        else:
+            print("In your order you now have:")
+            review_order(c)
     elif c[pasta_index][2] != 0:
         print()
         output_message = "In your basket you now have:"
@@ -273,18 +295,28 @@ def get_phone():
 
     :return: string
     """
-
     run = True
     while run is True:
-        phone = validate_string_len("Please enter your phone number:", 9, 14).strip().replace(" ", "")
+        phone = validate_string_len("Please enter your phone number:", 9, 12).strip().replace(" ", "")
         if phone.isdigit():
             return phone
         print("Oops, invalid entry, please try again")
 
 
+def second_choice():
+    choice = get_string("You chose not to confirm details,"
+                               " erase and return to main menu (M) or "
+                               "erase and re-enter (R)?:").upper()
+    if choice == "M":
+        return None
+    if choice == "R":
+        print("Details erased, please re-enter")
+    else:
+        print("Oops, invalid input, please try again")
+
+
 def details_delivery(r):
     """Confirm the customer details for delivery.
-
     :param r: list
     :return: None
     """
@@ -295,57 +327,39 @@ def details_delivery(r):
         address = validate_string_len("Please enter your street address "
                                       "and suburb:", 15, 200)
         phone = get_phone()
-        confirm = get_string("Your details are\n{}\n{}\n{}\n "
-                             "Would you like to confirm? Y/N:"
-                             .format(name, address, phone)).upper()
+        print("Your details are\n{}\n{}\n{}\n".format(name, address, phone))
+        confirm = get_yes_no("Would you like to confirm? Y/N:")
         if confirm == "Y":
             temp = [name, address, phone]
             r.append(temp)
             return confirm
         elif confirm == "N":
-            second_choice = get_string("You chose not to confirm details,"
-                                       " erase and return to main menu (M) or "
-                                       "erase and re-enter (R)?:").upper()
-            if second_choice == "M":
-                return None
-            if second_choice == "R":
-                print("Details erased, please re-enter")
-            else:
-                print("Oops, invalid input, please try again")
+            second_choice()
         else:
             print("Oops, invalid input, please try again")
 
 
 def details_pickup(p):
-    """Confirm the customer details for pick up.
+    """Confirm the customer details for pickup.
 
     :param p: list
     :return: None
     """
     run = True
     while run is True:
-        name = validate_string_len("Please enter your name:",
-                                   1, 100).capitalize()
+        name = validate_string_len("Please enter your name:", 1, 100) \
+            .capitalize()
         phone = get_phone()
-        confirm = get_string("Your details are\n{}\n{}\n "
-                             "Would you like to confirm? Y/N::"
-                             .format(name, phone)).upper()
+        print("Your details are\n{}\n{}\n{}\n".format(name, phone))
+        confirm = get_yes_no()
         if confirm == "Y":
             temp = [name, phone]
             p.append(temp)
             return confirm
         elif confirm == "N":
-            second_choice = get_string("You chose not to confirm details,"
-                                       "erase and return to main menu (M) or "
-                                       "erase and re-enter (R)?:").upper()
-            if second_choice == "M":
-                return None
-            if second_choice == "R":
-                print("Details erased, please re-enter")
-            else:
-                print("Oops, invalid input, please try again")
+            second_choice()
         else:
-            print("Oops, invalid entry, please try again")
+            print("Oops, invalid input, please try again")
 
 
 def customer_details(c, r, p):
@@ -377,7 +391,7 @@ def customer_details(c, r, p):
         receive = get_string("Would you like to have your order "
                              "delivered (D) or pick up (P):").upper()
         if receive == "D":
-            choice = get_string("This adds automatic $3 surcharge, total cost"
+            choice = get_yes_no("This adds automatic $3 surcharge, total cost"
                                 " is now ${}, would you like to continue? Y/N:"
                                 .format(grand_total + 3)).upper()
             if choice == "Y":
@@ -421,7 +435,7 @@ def complete_order(c, p, d):
             .format(c[i][2], c[i][0], c[i][1], total)
         print(output)
     final_output = "The grand total of your order is ${}"\
-            .format(grand_total)
+        .format(grand_total)
     print(final_output)
     run = True
     while run is True:
