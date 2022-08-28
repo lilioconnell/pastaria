@@ -303,18 +303,6 @@ def get_phone():
         print("Oops, invalid entry, please try again")
 
 
-def second_choice():
-    choice = get_string("You chose not to confirm details,"
-                               " erase and return to main menu (M) or "
-                               "erase and re-enter (R)?:").upper()
-    if choice == "M":
-        return None
-    if choice == "R":
-        print("Details erased, please re-enter")
-    else:
-        print("Oops, invalid input, please try again")
-
-
 def details_delivery(r):
     """Confirm the customer details for delivery.
     :param r: list
@@ -327,14 +315,23 @@ def details_delivery(r):
         address = validate_string_len("Please enter your street address "
                                       "and suburb:", 15, 200)
         phone = get_phone()
-        print("Your details are\n{}\n{}\n{}\n".format(name, address, phone))
+        print("Your details are\n{}\n{}\n{}".format(name, address, phone))
         confirm = get_yes_no("Would you like to confirm? Y/N:")
         if confirm == "Y":
             temp = [name, address, phone]
             r.append(temp)
             return confirm
         elif confirm == "N":
-            second_choice()
+            print("Details erased, please re-enter")
+            second_choice = get_string("You chose not to confirm details,"
+                                       " erase and return to main menu (M) or "
+                                       "erase and re-enter (R)?:").upper()
+            if second_choice == "M":
+                return None
+            if second_choice == "R":
+                print("Details erased, please re-enter")
+            else:
+                print("Oops, invalid input, please try again")
         else:
             print("Oops, invalid input, please try again")
 
@@ -350,14 +347,22 @@ def details_pickup(p):
         name = validate_string_len("Please enter your name:", 1, 100) \
             .capitalize()
         phone = get_phone()
-        print("Your details are\n{}\n{}\n{}\n".format(name, phone))
-        confirm = get_yes_no()
+        print("Your details are\n{}\n{}".format(name, phone))
+        confirm = get_yes_no("Would you like to confirm? Y/N:")
         if confirm == "Y":
             temp = [name, phone]
             p.append(temp)
             return confirm
         elif confirm == "N":
-            second_choice()
+            second_choice = get_string("You chose not to confirm details,"
+                                       " erase and return to main menu (M) or "
+                                       "erase and re-enter (R)?:").upper()
+            if second_choice == "M":
+                return None
+            if second_choice == "R":
+                print("Details erased, please re-enter")
+            else:
+                print("Oops, invalid input, please try again")
         else:
             print("Oops, invalid input, please try again")
 
