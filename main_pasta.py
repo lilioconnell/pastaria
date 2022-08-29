@@ -316,7 +316,7 @@ def details_delivery(r):
                                       "and suburb:", 15, 200)
         phone = get_phone()
         print("Your details are\n{}\n{}\n{}".format(name, address, phone))
-        confirm = get_yes_no("Would you like to confirm? Y/N:")
+        confirm = get_yes_no("Would you like to confirm your details? Y/N:")
         if confirm == "Y":
             temp = [name, address, phone]
             r.append(temp)
@@ -348,7 +348,7 @@ def details_pickup(p):
             .capitalize()
         phone = get_phone()
         print("Your details are\n{}\n{}".format(name, phone))
-        confirm = get_yes_no("Would you like to confirm? Y/N:")
+        confirm = get_yes_no("Would you like to confirm your details? Y/N:")
         if confirm == "Y":
             temp = [name, phone]
             p.append(temp)
@@ -447,7 +447,7 @@ def complete_order(c, p, d):
         choice = get_string("Above are the details of your order, "
                             "would you like to confirm? Y/N:").upper()
         if choice == "Y":
-            print("Thank you your order is complete")
+            print("Thank you your order is confmired and now being prepared")
             c.clear()
             p.clear()
             d.clear()
